@@ -25,6 +25,8 @@ fn main() {
         let s4 = s3.clone(); 
 
         println!("{}", takes_ownership_and_return_copy(s4));
+
+        get_reference(&s3);
     }
     // s2 was moved in scope above!
     //println!("ex: {}", s2);
@@ -36,4 +38,8 @@ fn takes_ownership_and_return_copy(string: String) -> String {
 
 fn takes_ownership_and_return_copy_and_size(string: String) -> (usize, String) {
     (string.len(), string)
+}
+
+fn get_reference(string: &String) -> usize {
+    return string.len();
 }

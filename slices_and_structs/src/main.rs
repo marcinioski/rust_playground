@@ -3,6 +3,30 @@ struct User {
     sign_in_count: u64,
 }
 
+impl User {
+    fn show_name(&self) {
+        println!("{}", self.username);
+    }
+
+    fn change_name(&mut self, new_name: &str) {
+        self.username = String::from(new_name);
+    }
+
+    fn new(username: &str) -> User {
+        User{
+            username: String::from(username),
+            sign_in_count: 1,
+        }
+    }
+}
+
+impl User {
+    fn are_same(&self, other: &User) -> bool {
+        //self.username.find(other.username)
+        return false
+    }
+}
+
 fn main() {
     println!("Hello, world!");
 
@@ -10,6 +34,16 @@ fn main() {
     println!("first word len: {}", first_word(&s));
     println!("first word: {}", string_slices(&s));
     println!("second word: {}", second_word(&s));
+
+    let u1 = build_user(String::from("user1"));
+
+    u1.show_name();
+
+    let mut u1: User = User::new("new_name");
+
+    u1.show_name();
+    u1.change_name("new_name1");
+    u1.show_name();
 }
 
 fn first_word(string: &String) -> usize {

@@ -1,5 +1,5 @@
 [package]
-name = "sample_module"
+name = "sample_module2"
 version = "0.1.0"
 authors = ["marcin.hujdus <marcin.hujdus@aptiv.com>"]
 edition = "2018"
@@ -7,4 +7,3 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sample_module2 = {path = "../sample_module2"}

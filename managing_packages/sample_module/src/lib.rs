@@ -42,6 +42,9 @@ use crate::sample_module_namespace_1::module_a;
 mod second_module;
 use second_module::module_aa;
 
+use sample_module2;
+
 pub fn internal_call() {
     module_aa::call_aa();
+    sample_module2::sample_module2_function();
 }

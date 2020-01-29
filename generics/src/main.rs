@@ -13,6 +13,7 @@ fn largest<T>(list: &[T]) -> T {
 */
 
 mod own_trait;
+mod lifetimes;
 
 use own_trait::OwnTrait;
 
@@ -70,4 +71,13 @@ fn main() {
     callWhere(&p1);
     call2(p1);
 //    call1(p1);
+    let x = lifetimes::longest("long", "longest");
+
+    let mut result: &str;
+    {
+        let y = "much longer";
+        result = lifetimes::longest(y, x);
+    }
+
+    println!("{}", result);
 }

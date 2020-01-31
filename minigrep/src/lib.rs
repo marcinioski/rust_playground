@@ -1,9 +1,11 @@
 use std::fs;
 use std::error::Error;
+use std::env;
 
 pub struct Config<'a> {
     pub query: &'a str,
     pub filename: &'a str,
+    pub sensitive: bool,
 }
 
 impl <'a> Config <'a>{
@@ -26,22 +28,37 @@ impl <'a> Config <'a>{
 
         let query = &args[1];
         let filename = &args[2];
+        let sensitive = env::var("CASE_SENSITIVE").is_err();
+        Ok(Config {query, filename, sensitive})
+    }
 
-        Ok(Config {query, filename})
+    pub fn open_file(&self) -> Result<String, &'static str> {
+        let content = fs::read_to_string(self.filename).expect("could not open file!");
+        return Ok(content);
     }
 }
 
-pub fn run(config: &Config) -> Result<(), Box<dyn Error>>{
-    let contents = fs::read_to_string(config.filename)?;
-
-    for line in search(&config.query, &contents) {
-        println!("{}", line);
-    }
+pub fn run(config: &Config) -> Result<(), &'static str>{
+    match config.open_file() {
+        Ok(contents) => {
+            if config.sensitive == true {
+                for line in search_case_sensitive(&config.query, &contents) {
+                    println!("{}", line);
+                }
+            }
+            else {
+                for line in search_case_insensitive(&config.query, &contents) {
+                    println!("{}", line);
+                }
+            }
+        }
+        Err(e) => return Err(e)
+    };
 
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -53,3 +70,14 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     return results;
 }
 
+pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query.to_lowercase()) {
+            results.push(line);
+        }
+    }
+
+    return results;
+}

@@ -29,6 +29,7 @@ impl <'a> Config <'a>{
         let query = &args[1];
         let filename = &args[2];
         let sensitive = env::var("CASE_SENSITIVE").is_err();
+        println!("sensitive: {}", sensitive);
         Ok(Config {query, filename, sensitive})
     }
 
@@ -41,7 +42,7 @@ impl <'a> Config <'a>{
 pub fn run(config: &Config) -> Result<(), &'static str>{
     match config.open_file() {
         Ok(contents) => {
-            if config.sensitive == true {
+            if config.sensitive {
                 for line in search_case_sensitive(&config.query, &contents) {
                     println!("{}", line);
                 }

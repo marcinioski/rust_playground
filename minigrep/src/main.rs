@@ -16,7 +16,7 @@ fn main() {
     println!("looking for: {} from: {}", config.query, config.filename);
 
     if let Err(e) = minigrep::run(&config) {
-        println!("appearance error: {}", e);
+        eprintln!("appearance error: {}", e);
         process::exit(1);
     }
 }

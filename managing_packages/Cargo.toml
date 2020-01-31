@@ -8,3 +8,6 @@ edition = "2018"
 
 [dependencies]
 sample_module = { path = "./sample_module" }
+
+[profile.release]
+panic = 'abort'

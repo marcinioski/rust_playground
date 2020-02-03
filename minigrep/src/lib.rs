@@ -2,13 +2,13 @@ use std::fs;
 use std::error::Error;
 use std::env;
 
-pub struct Config<'a> {
-    pub query: &'a str,
-    pub filename: &'a str,
+pub struct Config {
+    pub query: String,
+    pub filename: String,
     pub sensitive: bool,
 }
 
-impl <'a> Config <'a>{
+impl Config {
 /*
     fn new(args: &[String]) -> Config
     {
@@ -21,20 +21,25 @@ impl <'a> Config <'a>{
         Config {query, filename}
     }
 */
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("Not enough parameters!");
-        }
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        args.next();
 
-        let query = &args[1];
-        let filename = &args[2];
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didnt get a query string!")
+        };
+
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didnt get a filename!")
+        };
         let sensitive = env::var("CASE_SENSITIVE").is_err();
         println!("sensitive: {}", sensitive);
         Ok(Config {query, filename, sensitive})
     }
 
     pub fn open_file(&self) -> Result<String, &'static str> {
-        let content = fs::read_to_string(self.filename).expect("could not open file!");
+        let content = fs::read_to_string(&self.filename).expect("could not open file!");
         return Ok(content);
     }
 }
@@ -60,15 +65,9 @@ pub fn run(config: &Config) -> Result<(), &'static str>{
 }
 
 pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    return results;
+    contents.lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {

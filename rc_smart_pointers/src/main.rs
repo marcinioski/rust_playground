@@ -6,6 +6,9 @@ enum List {
 use crate::List::{Cons, Nil};
 use std::rc::Rc;
 
+mod refcel_ex;
+mod combine_rc_refcell;
+
 fn main() {
     let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
 
@@ -16,4 +19,6 @@ fn main() {
     // so it is posisble:
     let c = Cons(4, Rc::clone(&a));
     println!("a rc: {}", Rc::strong_count(&a));
+
+    combine_rc_refcell::call1();
 }

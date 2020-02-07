@@ -8,6 +8,8 @@ use std::rc::Rc;
 
 mod refcel_ex;
 mod combine_rc_refcell;
+mod reference_cycle;
+mod rc_tree;
 
 fn main() {
     let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
@@ -21,4 +23,6 @@ fn main() {
     println!("a rc: {}", Rc::strong_count(&a));
 
     combine_rc_refcell::call1();
+    reference_cycle::create_reference_cycle();
+    rc_tree::create_rc_tree();
 }

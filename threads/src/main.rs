@@ -43,9 +43,12 @@ fn run_threads2() {
     handle.join().unwrap();
 }
 
+mod channels;
+
 fn main() {
     println!("Hello, world!");
 
     //run_threads();
-    run_threads2();
+    //run_threads2();
+    channels::create_channel();
 }

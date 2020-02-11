@@ -44,11 +44,13 @@ fn run_threads2() {
 }
 
 mod channels;
+mod mutexes;
 
 fn main() {
     println!("Hello, world!");
 
     //run_threads();
     //run_threads2();
-    channels::create_channel();
+    //channels::create_channel();
+    mutexes::example_mutex();
 }

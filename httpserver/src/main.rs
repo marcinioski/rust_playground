@@ -23,7 +23,7 @@ fn parse_request(stream: &mut TcpStream) ->  RequestType {
 }
 
 fn handle_connection(mut stream: TcpStream) {
-
+    println!("MH: handle_conneciton entry");
     let mut contents: String = String::from("");
 
     match parse_request(&mut stream) {
@@ -41,14 +41,17 @@ use httpserver::ThreadPool;
 fn run() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
-    let pool = ThreadPool::new(4);
+    if let Ok(pool) = ThreadPool::new(4) {
 
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
+        for stream in listener.incoming().take(2) {
+            let stream = stream.unwrap();
 
-        println!("Connection established!");
+            println!("Connection established!");
 
-        handle_connection(stream);
+            pool.execute ( || {
+                handle_connection(stream);
+            });
+        }
     }
 }
 
